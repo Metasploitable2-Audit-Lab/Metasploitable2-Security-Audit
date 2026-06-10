@@ -13,6 +13,7 @@ Se ejecutó un escaneo de servicios y versiones para identificar puertos abierto
 
 ```bash
 nmap -sV 10.0.0.2
+
 Resultados destacados:
 
 Puerto 1524/tcp abierto: Ejecuta el servicio ingreslock (Shell interactiva desprotegida / Backdoor).
