@@ -3,8 +3,6 @@ Markdown
 
 Este repositorio contiene el reporte técnico de la auditoría de seguridad realizada sobre la máquina objetivo **Metasploitable 2** (IP: `10.0.0.2`), con el fin de identificar vulnerabilidades críticas, explotarlas de forma controlada y proponer medidas de mitigación.
 
----
-
 ## 🔍 Fases de la Auditoría
 
 ### 1. Descubrimiento y Escaneo de Conectividad de Red (Nmap)
