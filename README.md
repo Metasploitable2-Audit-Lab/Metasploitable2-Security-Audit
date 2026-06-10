@@ -2,10 +2,24 @@
 
 Este documento constituye el informe técnico final de la auditoría de seguridad y pruebas de penetración (Pentesting) de caja negra realizada sobre la máquina virtual de entrenamiento **Metasploitable 2** (Dirección IP de destino: `10.0.0.2`).
 
-El objetivo primordial de esta auditoría fue identificar puertos abiertos expuestos de manera insegura, explotar vulnerabilidades críticas de forma controlada para demostrar el impacto real de un ataque, y redactar recomendaciones sólidas de mitigación para blindar el sistema.
+---
+
+## 📌 Tabla de Contenidos (Acceso Rápido)
+
+Haga clic en cualquiera de los siguientes puntos para desplazarse directamente a la sección técnica correspondiente:
+
+* [📋 Información General de la Auditoría](#informacion-general)
+* [🔍 Fases Técnicas de la Auditoría](#fases-tecnicas)
+  * [1. Reconocimiento y Escaneo (Nmap)](#fase-1-nmap)
+  * [2. Explotación Práctica y Acceso Inicial (Netcat)](#fase-2-netcat)
+  * [3. Post-Explotación y Criptoanálisis (John the Ripper)](#fase-3-john)
+* [🔒 Recomendaciones de Mitigación y Hardening](#recomendaciones-mitigacion)
+  * [1. Cierre de Puertos y Servicios](#mitigacion-1)
+  * [2. Robustecimiento de Credenciales](#mitigacion-2)
 
 ---
 
+<a name="informacion-general"></a>
 ## 📋 Información General de la Auditoría
 
 * **Auditor / Consultor:** Alejandro (Junior Security Consultant)
@@ -16,8 +30,10 @@ El objetivo primordial de esta auditoría fue identificar puertos abiertos expue
 
 ---
 
+<a name="fases-tecnicas"></a>
 ## 🔍 Fases Técnicas de la Auditoría
 
+<a name="fase-1-nmap"></a>
 ### 1. Reconocimiento y Escaneo de Conectividad (Nmap)
 
 La primera fase consistió en un análisis activo de la superficie de ataque utilizando la herramienta **Nmap** para detectar puertos de escucha TCP, identificar los servicios asociados y determinar con precisión las versiones de software instaladas.
@@ -39,6 +55,7 @@ El escaneo reveló una superficie de ataque extremadamente amplia y peligrosa. A
 
 ---
 
+<a name="fase-2-netcat"></a>
 ### 2. Explotación Práctica y Acceso Inicial (Netcat)
 
 Utilizando los datos del escaneo previo, se procedió a realizar una explotación directa e inmediata sobre el puerto crítico `1524`. Dado que el servicio `ingreslock` en esta máquina está configurado para levantar una shell interactiva al recibir conexiones entrantes, se utilizó la herramienta **Netcat** para efectuar la conexión de red.
@@ -64,6 +81,7 @@ La consola retornó el identificador `root` (UID 0), confirmando que el acceso o
 
 ---
 
+<a name="fase-3-john"></a>
 ### 3. Post-Explotación, Exfiltración y Criptoanálisis (John the Ripper)
 
 Con privilegios de administrador (`root`) consolidados en el servidor objetivo, se procedió a auditar la seguridad de las credenciales de los usuarios locales del sistema mediante una simulación de robo de identidad (exfiltración de contraseñas).
@@ -94,14 +112,17 @@ En menos de un segundo, la herramienta procesó exitosamente el hash criptográf
 
 ---
 
+<a name="recomendaciones-mitigacion"></a>
 ## 🔒 Recomendaciones de Mitigación y Hardening
 
 Para solucionar de manera definitiva las brechas de seguridad identificadas en esta auditoría, se recomienda al equipo de infraestructura aplicar las siguientes contramedidas de inmediato:
 
+<a name="mitigacion-1"></a>
 ### 1. Cierre de Puertos y Servicios Innecesarios
 * **Deshabilitar Backdoors:** Detener de forma inmediata el servicio `ingreslock` asociado al puerto `1524`.
 * **Configuración de Firewall:** Implementar un firewall local (como `iptables` o `ufw`) para bloquear de manera estricta cualquier puerto que no requiera exposición pública. La política predeterminada del firewall debe ser denegar todo el tráfico entrante (`DROP`) salvo aquel explícitamente autorizado.
 
+<a name="mitigacion-2"></a>
 ### 2. Políticas de Robustecimiento de Credenciales (Hardening)
 * **Cambio de Contraseñas:** Reemplazar de forma obligatoria la contraseña predeterminada del usuario `msfadmin` por una clave robusta que cumpla con políticas de complejidad (mínimo 12 caracteres, mayúsculas, minúsculas, números y caracteres especiales).
 * **Migración Criptográfica:** Configurar el sistema operativo para que los nuevos hashes generados en `/etc/shadow` utilicen algoritmos modernos y resistentes a ataques de fuerza bruta como **SHA-512** (con rondas de hashing configurables) o **bcrypt**, reemplazando el obsoleto estándar MD5crypt.
